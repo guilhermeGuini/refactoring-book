@@ -1,4 +1,4 @@
-export function calcAmount(type, audience) {
+export function amount(type, audience) {
     let amountResponse;
     switch (type) {
     case "tragedy":
@@ -21,7 +21,7 @@ export function calcAmount(type, audience) {
     return amountResponse;
 }
 
-export function calVolumeCredits(type, audience) {
+export function volumeCredits(type, audience) {
     let response = Math.max(audience - 30, 0);
     if ("comedy" === type) {
         response += Math.floor(audience / 5);
@@ -29,10 +29,10 @@ export function calVolumeCredits(type, audience) {
     return response;
 }
 
-export function calcTotalCredits(performances, plays) {
+export function totalVolumeCredits(performances, plays) {
     let response = 0;
     for (let perf of performances) {
-        response += calVolumeCredits(plays[perf.playID].type, perf.audience);
+        response += volumeCredits(plays[perf.playID].type, perf.audience);
     }
     return response;
 }
@@ -41,8 +41,17 @@ export function totalAmount(performances, plays) {
     let response = 0;
 
     for (let perf of performances) {
-        response += calcAmount(plays[perf.playID].type, perf.audience);
+        response += amount(plays[perf.playID].type, perf.audience);
     }
 
     return response;
+}
+
+export function createNewObjectWithAmount(performances, plays) {
+    let performancesCopy = [];
+    Object.assign(performancesCopy, performances);
+    for (let perf of performancesCopy) {
+        perf.amount = amount(plays[perf.playID].type, perf.audience); 
+    }
+    return performancesCopy;
 }
