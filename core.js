@@ -6,27 +6,32 @@ function statement(invoice, plays) {
                              { style: "currency", currency: "USD",
                                minimumFractionDigits: 2 }).format;
 
-    for (let perf of invoice.performances) {
-        const play = plays[perf.playID];
-        let thisAmount = 0;
-
-        switch (play.type) {
+    function calcAmount(type, audience) {
+        let amountResponse;
+        switch (type) {
         case "tragedy":
-            thisAmount = 40000;
-            if (perf.audience > 30) {
-                thisAmount += 1000 * (perf.audience - 30);
+            amountResponse = 40000;
+            if (audience > 30) {
+                amountResponse += 1000 * (audience - 30);
             }
             break;
         case "comedy":
-            thisAmount = 30000;
-            if (perf.audience > 20) {
-                thisAmount += 10000 + 500 * (perf.audience - 20);
+            amountResponse = 30000;
+            if (audience > 20) {
+                amountResponse += 10000 + 500 * (audience - 20);
             }
-            thisAmount += 300 * perf.audience;
+            amountResponse += 300 * audience;
             break;
         default: 
-            throw new Error(`unknown type: ${play.type}`);
+            throw new Error(`unknown type: ${type}`);
         }
+
+        return amountResponse;
+    }
+
+    for (let perf of invoice.performances) {
+        const play = plays[perf.playID];
+        let thisAmount = calcAmount(play.type, perf.audience);
 
         // soma créditos por volume
         volumeCredits += Math.max(perf.audience - 30, 0);
