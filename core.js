@@ -39,20 +39,19 @@ function statement(invoice, plays, data) {
          return response;
     }
 
-    function calcTotalCredits() {
+    function calcTotalCredits(performances) {
         let response = 0;
-        for (let perf of invoice.performances) {
+        for (let perf of performances) {
             response += calVolumeCredits(plays[perf.playID].type, perf.audience);
         }
         return response;
     }
 
-    function calcTotalAmount() {
+    function calcTotalAmount(performances) {
         let response = 0;
        
-        for (let perf of invoice.performances) {
-            const play = plays[perf.playID];
-            response += calcAmount(play.type, perf.audience);
+        for (let perf of performances) {
+            response += calcAmount(plays[perf.playID].type, perf.audience);
         }
 
         return response;
@@ -64,8 +63,8 @@ function statement(invoice, plays, data) {
         result += ` ${play.name}: ${format(thisAmount/100)} (${perf.audience} seats)\n`;
     }
 
-    let volumeCredits = calcTotalCredits();
-    let totalAmount = calcTotalAmount();
+    let volumeCredits = calcTotalCredits(invoice.performances);
+    let totalAmount = calcTotalAmount(invoice.performances);
 
     result += `Amount owed is ${format(totalAmount/100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
