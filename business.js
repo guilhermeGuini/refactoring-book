@@ -37,7 +37,7 @@ export function calcTotalCredits(performances, plays) {
     return response;
 }
 
-export function calcTotalAmount(performances, plays) {
+export function totalAmount(performances, plays) {
     let response = 0;
 
     for (let perf of performances) {

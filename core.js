@@ -17,7 +17,7 @@ function statement(invoice, plays, data) {
     }
 
     let volumeCredits = business.calcTotalCredits(invoice.performances, plays);
-    let totalAmount = business.calcTotalAmount(invoice.performances, plays);
+    let totalAmount = business.totalAmount(invoice.performances, plays);
 
     result += `Amount owed is ${format(totalAmount/100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
@@ -26,7 +26,8 @@ function statement(invoice, plays, data) {
 
 let data = {
     customer: invoices()[0].customer,
-    performances: invoices()[0].performances
+    performances: invoices()[0].performances,
+    totalAmount: business.totalAmount(invoices()[0].performances, plays())
 }
 
 let result = statement(invoices()[0], plays(), data);
