@@ -1,8 +1,6 @@
 
 
 function statement(invoice, plays, data) {
-    let totalAmount = 0;
-    
     let result = `Statement for ${invoice.customer}\n`;
 
     function format(amount) {
@@ -49,15 +47,25 @@ function statement(invoice, plays, data) {
         return response;
     }
 
+    function calcTotalAmount() {
+        let response = 0;
+       
+        for (let perf of invoice.performances) {
+            const play = plays[perf.playID];
+            response += calcAmount(play.type, perf.audience);
+        }
+
+        return response;
+    }
+
     for (let perf of invoice.performances) {
         const play = plays[perf.playID];
         let thisAmount = calcAmount(play.type, perf.audience);
-
         result += ` ${play.name}: ${format(thisAmount/100)} (${perf.audience} seats)\n`;
-        totalAmount += thisAmount;
     }
 
     let volumeCredits = calcTotalCredits();
+    let totalAmount = calcTotalAmount();
 
     result += `Amount owed is ${format(totalAmount/100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
