@@ -1,7 +1,7 @@
 import * as business from './business.js';
 import { invoices } from './invoices.js';
 import { plays } from './plays.js';
-import { statement } from './core.js';
+import { text } from './report.js';
 
 let data = {
     plays: plays(),
@@ -11,7 +11,7 @@ let data = {
     totalVolumeCredits: business.totalVolumeCredits(invoices()[0].performances, plays())
 }
 
-let result = statement(data);
+let result = text(data);
 console.log(result)
 
 let arrResult = result.split('\n');

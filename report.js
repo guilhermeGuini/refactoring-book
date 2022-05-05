@@ -1,4 +1,4 @@
-export function statement(data) {
+export function text(data) {
     let result = `Statement for ${data.customer}\n`;
 
     for (let perf of data.performances) {
@@ -10,7 +10,7 @@ export function statement(data) {
     return result;
 }
 
-export function statementHtml(data) {
+export function hml(data) {
     let result = `<h1>Statement for ${data.customer}</h1>`;
 
     for (let perf of data.performances) {
