@@ -1,83 +1,38 @@
-
+import * as business from './business.js';
+import { invoices } from './invoices.js';
+import { plays } from './plays.js';
 
 function statement(invoice, plays, data) {
-    let result = `Statement for ${invoice.customer}\n`;
+    let result = `Statement for ${data.customer}\n`;
 
     function format(amount) {
         return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD",
                                                 minimumFractionDigits: 2 }).format(amount);
     }
 
-    function calcAmount(type, audience) {
-        let amountResponse;
-        switch (type) {
-        case "tragedy":
-            amountResponse = 40000;
-            if (audience > 30) {
-                amountResponse += 1000 * (audience - 30);
-            }
-            break;
-        case "comedy":
-            amountResponse = 30000;
-            if (audience > 20) {
-                amountResponse += 10000 + 500 * (audience - 20);
-            }
-            amountResponse += 300 * audience;
-            break;
-        default: 
-            throw new Error(`unknown type: ${type}`);
-        }
-
-        return amountResponse;
-    }
-
-    function calVolumeCredits(type, audience) {
-         let response = Math.max(audience - 30, 0);
-         if ("comedy" === type) {
-            response += Math.floor(audience / 5);
-         } 
-         return response;
-    }
-
-    function calcTotalCredits(performances) {
-        let response = 0;
-        for (let perf of performances) {
-            response += calVolumeCredits(plays[perf.playID].type, perf.audience);
-        }
-        return response;
-    }
-
-    function calcTotalAmount(performances) {
-        let response = 0;
-       
-        for (let perf of performances) {
-            response += calcAmount(plays[perf.playID].type, perf.audience);
-        }
-
-        return response;
-    }
-
     for (let perf of invoice.performances) {
         const play = plays[perf.playID];
-        let thisAmount = calcAmount(play.type, perf.audience);
+        let thisAmount = business.calcAmount(play.type, perf.audience);
         result += ` ${play.name}: ${format(thisAmount/100)} (${perf.audience} seats)\n`;
     }
 
-    let volumeCredits = calcTotalCredits(invoice.performances);
-    let totalAmount = calcTotalAmount(invoice.performances);
+    let volumeCredits = business.calcTotalCredits(invoice.performances, plays);
+    let totalAmount = business.calcTotalAmount(invoice.performances, plays);
 
     result += `Amount owed is ${format(totalAmount/100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
     return result;
 }
 
-let invoices = require('./invoices.json');
-let plays = require('./plays.json');
+let data = {
+    customer: invoices()[0].customer,
+    performances: invoices()[0].performances
+}
 
-let result = statement(invoices[0], plays);
+let result = statement(invoices()[0], plays(), data);
 console.log(result)
 
-arrResult = result.split('\n');
+let arrResult = result.split('\n');
 
 console.assert(arrResult[0] === 'Statement for BigCo');
 console.assert(arrResult[1] === ' Hamlet: $650.00 (55 seats)');
