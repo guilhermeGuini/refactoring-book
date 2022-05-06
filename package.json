@@ -1,3 +1,24 @@
 {
-    "type": "module"
+  "type": "module",
+  "name": "refactoring-book",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guilhermeGuini/refactoring-book.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guilhermeGuini/refactoring-book/issues"
+  },
+  "homepage": "https://github.com/guilhermeGuini/refactoring-book#readme",
+  "description": "",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
+  }
 }
