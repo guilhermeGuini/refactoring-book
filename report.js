@@ -10,7 +10,7 @@ export function text(data) {
     return result;
 }
 
-export function hml(data) {
+export function html(data) {
     let result = `<h1>Statement for ${data.customer}</h1>`;
 
     for (let perf of data.performances) {
